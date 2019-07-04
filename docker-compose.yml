@@ -6,8 +6,6 @@ services:
     container_name: namenode
     ports:
       - 9870:9870
-    volumes:
-      - hadoop_namenode:/hadoop/dfs/name
     environment:
       - CLUSTER_NAME=test
     env_file:
@@ -19,8 +17,6 @@ services:
     hostname: datanode1
     ports:
       - 9864:9864     
-    volumes:
-      - hadoop_datanode1:/hadoop/dfs/data
     environment:
       SERVICE_PRECONDITION: "namenode:9870"
     env_file:
@@ -30,8 +26,6 @@ services:
     image: bde2020/hadoop-datanode:latest
     container_name: datanode2
     hostname: datanode2    
-    volumes:
-      - hadoop_datanode2:/hadoop/dfs/data
     environment:
       SERVICE_PRECONDITION: "namenode:9870"
     env_file:
@@ -42,12 +36,35 @@ services:
     image: bde2020/hadoop-datanode:latest
     container_name: datanode3
     hostname: datanode3    
-    volumes:
-      - hadoop_datanode3:/hadoop/dfs/data
     environment:
       SERVICE_PRECONDITION: "namenode:9870"
     env_file:
       - ./hadoop.env
+
+
+
+  datanode4:
+    image: bde2020/hadoop-datanode:latest
+    container_name: datanode4
+    hostname: datanode4
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870"
+    env_file:
+      - ./hadoop.env
+
+
+
+
+  datanode5:
+    image: bde2020/hadoop-datanode:latest
+    container_name: datanode5
+    hostname: datanode5
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870"
+    env_file:
+      - ./hadoop.env
+
+
   
 
   resourcemanager:
@@ -56,7 +73,7 @@ services:
     ports:
       - 8088:8088   
     environment:
-      SERVICE_PRECONDITION: "namenode:9870 datanode1:9864 datanode2:9864 datanode3:9864"
+      SERVICE_PRECONDITION: "namenode:9870 datanode1:9864 datanode2:9864 datanode3:9864 datanode4:9864 datanode5:9864"
     env_file:
       - ./hadoop.env
 
@@ -66,7 +83,7 @@ services:
     ports:
       - 8042:8042      
     environment:
-      SERVICE_PRECONDITION: "namenode:9870 datanode1:9864 datanode2:9864 datanode3:9864 resourcemanager:8088"
+      SERVICE_PRECONDITION: "namenode:9870 datanode1:9864 datanode2:9864 datanode3:9864 datanode4:9864 datanode5:9864 resourcemanager:8088"
     env_file:
       - ./hadoop.env
   
@@ -76,15 +93,7 @@ services:
     ports:
       - 8188:8188        
     environment:
-      SERVICE_PRECONDITION: "namenode:9870 datanode1:9864 datanode2:9864 datanode3:9864 resourcemanager:8088"
-    volumes:
-      - hadoop_historyserver:/hadoop/yarn/timeline
+      SERVICE_PRECONDITION: "namenode:9870 datanode1:9864 datanode2:9864 datanode3:9864 datanode4:9864 datanode5:9864 resourcemanager:8088"
     env_file:
       - ./hadoop.env
-  
-volumes:
-  hadoop_namenode:
-  hadoop_datanode1:
-  hadoop_datanode2:
-  hadoop_datanode3:
-  hadoop_historyserver:
+ 
